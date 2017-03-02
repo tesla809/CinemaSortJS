@@ -4,10 +4,6 @@ module.exports = function(grunt){
 		pkg: grunt.file.readJSON('package.json'),
 
 		uglify: {
-			build: {
-				src: 'src/js/*.js',
-				dest: 'js/script.min.js',
-			},
 			dev: {
 				options: {
 					beautify: true,
@@ -17,6 +13,10 @@ module.exports = function(grunt){
 				},
 				src: 'src/js/*.js',
 				dest: 'js/script.min.js'
+			},
+			build: {
+				src: 'src/js/*.js',
+				dest: 'js/script.min.js',
 			}
 		},
 

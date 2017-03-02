@@ -1,0 +1,21 @@
+{
+  "name": "cinemasort.js",
+  "version": "0.0.1",
+  "description": "JWPlayer coding exam that uses my custom library to organize videos",
+  "main": "index.html",
+  "scripts": {
+    "build": "browserify js/app.js -o js/bundle.js"
+  },
+  "author": "Anthony Albertorio",
+  "license": "ISC",
+  "devDependencies": {
+    "babelify": "^7.3.0",
+    "factor-bundle": "^2.5.0",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-less": "^1.4.0",
+    "grunt-contrib-uglify": "^2.2.0",
+    "grunt-contrib-watch": "^1.0.0"
+  },
+  "dependencies": {}
+}

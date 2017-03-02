@@ -3,6 +3,22 @@ module.exports = function(grunt){
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 
+		babel: {
+			options: {
+			sourceMap: false,
+			presets: ['es2015']
+		},			
+			dev: {
+				files: [{
+					expand: true,
+					src: 'src/js/es6/*.js',
+					dest: 'src/js/transpiled',
+					ext:'.js',
+					flatten: true
+				}],
+			}
+		},
+
 		uglify: {
 			dev: {
 				options: {
@@ -49,17 +65,20 @@ module.exports = function(grunt){
 				tasks: ['less:dev']
 			}
 		}
-
 	});	
 
 	// Load the plugins
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	// required for grunt-babel to work
+	require('load-grunt-tasks')(grunt);
 
 	// Register tasks(s)
-	grunt.registerTask('default', ['less:dev','uglify:dev']);
-	grunt.registerTask('dev', ['less:dev','uglify:dev']);
-	grunt.registerTask('build', ['less:build','uglify:build']);
+	grunt.registerTask('default', ['babel:dev', 'less:dev', 'uglify:dev']);
+	// grunt.registerTask('dev', ['babel:dev', 'less:dev', 'uglify:dev']);
+	grunt.registerTask('build', ['babel:dev', 'less:build', 'uglify:build']);
 	// no need to register grunt-watch
 };

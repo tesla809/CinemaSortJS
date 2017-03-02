@@ -27,11 +27,11 @@ module.exports = function(grunt){
 					compress: false,
 					preserveComments: 'all'
 				},
-				src: 'src/js/*.js',
+				src: 'src/js/transpiled/*.js',
 				dest: 'js/script.min.js'
 			},
 			build: {
-				src: 'src/js/*.js',
+				src: 'src/js/transpiled/*.js',
 				dest: 'js/script.min.js',
 			}
 		},
@@ -57,8 +57,8 @@ module.exports = function(grunt){
 
 		watch: {
 			js: {
-				files: ['src/js/*.js'],
-				tasks: ['uglify:dev']
+				files: ['src/js/es6/*.js'],
+				tasks: ['babel:dev', 'uglify:dev']
 			},
 			less: {
 				files: ['src/less/*.less'],
@@ -76,7 +76,7 @@ module.exports = function(grunt){
 
 	// Register tasks(s)
 	grunt.registerTask('default', ['babel:dev', 'less:dev', 'uglify:dev']);
-	// grunt.registerTask('dev', ['babel:dev', 'less:dev', 'uglify:dev']);
+	grunt.registerTask('dev', ['babel:dev', 'less:dev', 'uglify:dev']);
 	grunt.registerTask('build', ['babel:dev', 'less:build', 'uglify:build']);
 	// no need to register grunt-watch
 };

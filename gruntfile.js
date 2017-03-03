@@ -16,7 +16,7 @@ module.exports = function(grunt){
 					ext:'.js',
 					flatten: true,
 				}],
-			}
+			},
 		},
 
 		uglify: {
@@ -67,6 +67,23 @@ module.exports = function(grunt){
 			},
 		},
 
+		watch: {
+			options: {
+				livereload: true,
+			},
+			htmlDev: {
+				files: ['src/index.html'],
+			},
+			jsDev: {
+				files: ['src/js/es6/*.js'],
+				tasks: ['babel:dev', 'uglify:dev'],
+			},
+			lessDev: {
+				files: ['src/less/*.less'],
+				tasks: ['less:dev'],
+			},
+		},
+
 		connect: {
 			dev: {
 				options: {
@@ -78,28 +95,11 @@ module.exports = function(grunt){
 			},
 			build: {
 				options: {
-					port: 8000,
+					port: 8001,
 					host: 'localhost',
 					keepalive: true, 
-					open: 'http://localhost:8000/build/index.html',
+					open: 'http://localhost:8001/build/index.html',
 				},
-			}
-		},
-
-		watch: {
-			options: {
-				livereload: true,
-			},
-			html: {
-				files: ['index.html'],
-			},
-			js: {
-				files: ['src/js/es6/*.js'],
-				tasks: ['babel:dev', 'uglify:dev'],
-			},
-			less: {
-				files: ['src/less/*.less'],
-				tasks: ['less:dev'],
 			}
 		},
 

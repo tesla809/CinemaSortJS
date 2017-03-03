@@ -16,6 +16,7 @@
     "grunt-browserify": "^5.0.0",
     "grunt-concurrent": "^2.3.1",
     "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-cssmin": "^2.0.0",
     "grunt-contrib-htmlmin": "^2.2.0",
     "grunt-contrib-less": "^1.4.0",
     "grunt-contrib-uglify": "^2.2.0",

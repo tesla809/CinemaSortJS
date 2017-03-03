@@ -14,7 +14,7 @@ module.exports = function(grunt){
 					src: 'src/js/es6/*.js',
 					dest: 'src/js/transpiled',
 					ext:'.js',
-					flatten: true
+					flatten: true,
 				}],
 			}
 		},
@@ -25,14 +25,14 @@ module.exports = function(grunt){
 					beautify: true,
 					mangle: false,
 					compress: false,
-					preserveComments: 'all'
+					preserveComments: 'all',
 				},
 				src: 'src/js/transpiled/*.js',
 				dest: 'js/script.min.js'
 			},
 			build: {
 				src: 'src/js/transpiled/*.js',
-				dest: 'js/script.min.js',
+				dest: 'build/js/script.min.js',
 			}
 		},
 
@@ -50,24 +50,43 @@ module.exports = function(grunt){
 					compress: true
 				},
 				files: {
-					'css/style.css' : 'src/less/source.less'
+					'build/css/style.css' : 'src/less/source.less'
 				}
 			}
 		},
 
+		htmlmin: {                                     
+			build: {                                      
+			  options: {                                 
+			    removeComments: true,
+			    collapseWhitespace: true,
+			  },
+			  files: {                                   
+			    'build/index.html': 'src/index.html', 
+			  }
+			},
+		},
+
 		watch: {
+			options: {
+				livereload: true,
+			},
+			html: {
+				files: ['index.html'],
+			},
 			js: {
 				files: ['src/js/es6/*.js'],
-				tasks: ['babel:dev', 'uglify:dev']
+				tasks: ['babel:dev', 'uglify:dev'],
 			},
 			less: {
 				files: ['src/less/*.less'],
-				tasks: ['less:dev']
+				tasks: ['less:dev'],
 			}
 		}
 	});	
 
 	// Load the plugins
+	grunt.loadNpmTasks('grunt-contrib-htmlmin');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-watch');

@@ -55,6 +55,27 @@ module.exports = function(grunt){
 			}
 		},
 
+		cssmin: {
+			dev: {
+				files: [{
+					expand: true,
+					cwd: 'src/css',
+					src: ['*.css', '!*.min.css'],
+					dest: 'src/css',
+					ext: '.min.css',
+				}],	
+			},
+			build: {
+				files: [{
+					expand: true,
+					cwd: 'src/css',
+					src: ['*.css', '!*.min.css'],
+					dest: 'build/css',
+					ext: '.min.css',
+				}],
+			},
+		},
+
 		htmlmin: {                                     
 			build: {                                      
 			  options: {                                 
@@ -82,6 +103,7 @@ module.exports = function(grunt){
 				files: ['src/less/*.less'],
 				tasks: ['less:dev'],
 			},
+			// add css file watch here?
 		},
 
 		connect: {
@@ -123,6 +145,7 @@ module.exports = function(grunt){
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-htmlmin');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	// required for grunt-babel & grunt-concurrent to work
@@ -130,7 +153,7 @@ module.exports = function(grunt){
 
 	// Register tasks(s)
 	// default equals to dev task
-	grunt.registerTask('default', ['babel:dev', 'less:dev', 'uglify:dev', 'concurrent:dev']);	
-	grunt.registerTask('build', ['babel:dev', 'less:build', 'uglify:build', 'htmlmin:build', 'concurrent:build']);
+	grunt.registerTask('default', ['babel:dev', 'less:dev', 'cssmin:dev', 'uglify:dev', 'concurrent:dev']);	
+	grunt.registerTask('build', ['babel:dev', 'less:build', 'cssmin:build', 'uglify:build', 'htmlmin:build', 'concurrent:build']);
 	// no need to register grunt-watch
 };

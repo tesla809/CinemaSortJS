@@ -28,7 +28,7 @@ module.exports = function(grunt){
 					preserveComments: 'all',
 				},
 				src: 'src/js/transpiled/*.js',
-				dest: 'js/script.min.js'
+				dest: 'src/js/script.min.js'
 			},
 			build: {
 				src: 'src/js/transpiled/*.js',
@@ -42,7 +42,7 @@ module.exports = function(grunt){
 					paths: ['src/less/']
 				},
 				files: {
-					'css/style.css' : 'src/less/source.less'
+					'src/css/style.css' : 'src/less/source.less'
 				}
 			},
 			build: {
@@ -67,6 +67,25 @@ module.exports = function(grunt){
 			},
 		},
 
+		connect: {
+			dev: {
+				options: {
+					port: 8000,
+					host: 'localhost',
+					keepalive: true, 
+					open: 'http://localhost:8000/src/index.html',
+				},
+			},
+			build: {
+				options: {
+					port: 8000,
+					host: 'localhost',
+					keepalive: true, 
+					open: 'http://localhost:8000/build/index.html',
+				},
+			}
+		},
+
 		watch: {
 			options: {
 				livereload: true,
@@ -82,20 +101,36 @@ module.exports = function(grunt){
 				files: ['src/less/*.less'],
 				tasks: ['less:dev'],
 			}
-		}
+		},
+
+		concurrent: {
+			dev: {
+				tasks: ['connect:dev', 'watch'],
+				options: {
+					logConcurrentOutput: true,
+				}
+			},
+			build: {
+				tasks: ['connect:build', 'watch'],
+				options: {
+					logConcurrentOutput: true,
+				}
+			}
+		},
 	});	
 
 	// Load the plugins
-	grunt.loadNpmTasks('grunt-contrib-htmlmin');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-contrib-htmlmin');
+	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	// required for grunt-babel to work
+	// required for grunt-babel & grunt-concurrent to work
 	require('load-grunt-tasks')(grunt);
 
 	// Register tasks(s)
-	grunt.registerTask('default', ['babel:dev', 'less:dev', 'uglify:dev']);
-	grunt.registerTask('dev', ['babel:dev', 'less:dev', 'uglify:dev']);
-	grunt.registerTask('build', ['babel:dev', 'less:build', 'uglify:build']);
+	// default equals to dev task
+	grunt.registerTask('default', ['babel:dev', 'less:dev', 'uglify:dev', 'concurrent:dev']);	
+	grunt.registerTask('build', ['babel:dev', 'less:build', 'uglify:build', 'htmlmin:build', 'concurrent:build']);
 	// no need to register grunt-watch
 };

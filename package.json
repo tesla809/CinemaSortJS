@@ -4,7 +4,7 @@
   "description": "JWPlayer coding exam that uses my custom library to organize videos",
   "main": "index.html",
   "scripts": {
-    "build": "browserify js/app.js -o js/bundle.js"
+    "build": "browserify src/js/transpiled/app.js -o js/bundle.js"
   },
   "author": "Anthony Albertorio",
   "license": "ISC",

@@ -19,6 +19,17 @@ module.exports = function(grunt){
 			},
 		},
 
+		browserify: {
+			dev: {
+				src: 'src/js/transpiled/app.js',
+				dest: 'src/js/transpiled/bundle.js'
+			},
+			build: {
+				src: 'src/js/transpiled/app.js',
+				dest: 'src/js/transpiled/bundle.js',
+			},	
+		},
+
 		uglify: {
 			dev: {
 				options: {
@@ -27,12 +38,12 @@ module.exports = function(grunt){
 					compress: false,
 					preserveComments: 'all',
 				},
-				src: 'src/js/transpiled/*.js',
-				dest: 'src/js/script.min.js'
+				src: 'src/js/transpiled/bundle.js',
+				dest: 'src/js/bundle.min.js'
 			},
 			build: {
-				src: 'src/js/transpiled/*.js',
-				dest: 'build/js/script.min.js',
+				src: 'src/js/transpiled/bundle.js',
+				dest: 'build/js/bundle.min.js',
 			}
 		},
 
@@ -97,11 +108,15 @@ module.exports = function(grunt){
 			},
 			jsDev: {
 				files: ['src/js/es6/*.js'],
-				tasks: ['babel:dev', 'uglify:dev'],
+				tasks: ['babel:dev', 'browserify:dev', 'uglify:dev'],
 			},
 			lessDev: {
 				files: ['src/less/*.less'],
-				tasks: ['less:dev'],
+				tasks: ['less:dev', 'browserify:dev', 'cssmin'],
+			},
+			jsBuild: {
+				files: ['src/js/es6/*.js'],
+				tasks: ['babel:dev', 'browserify:build', 'uglify:build'],
 			},
 			// add css file watch here?
 		},
@@ -142,6 +157,7 @@ module.exports = function(grunt){
 	});	
 
 	// Load the plugins
+	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-htmlmin');
@@ -153,7 +169,7 @@ module.exports = function(grunt){
 
 	// Register tasks(s)
 	// default equals to dev task
-	grunt.registerTask('default', ['babel:dev', 'less:dev', 'cssmin:dev', 'uglify:dev', 'concurrent:dev']);	
-	grunt.registerTask('build', ['babel:dev', 'less:build', 'cssmin:build', 'uglify:build', 'htmlmin:build', 'concurrent:build']);
+	grunt.registerTask('default', ['babel:dev', 'less:dev', 'cssmin:dev', 'browserify:dev', 'uglify:dev', 'concurrent:dev']);	
+	grunt.registerTask('build', ['babel:dev', 'less:build', 'cssmin:build', 'browserify:build', 'uglify:build', 'htmlmin:build', 'concurrent:build']);
 	// no need to register grunt-watch
 };

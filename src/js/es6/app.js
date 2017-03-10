@@ -30,17 +30,13 @@ var app = function () {
             onlyClassName = noIdName && !noClassName,
             both = !noIdName && !noClassName;
 
-      if(typeof classname === 'string'){
-        classname = classname.split();
-      }
-
       if (both){
         el.id = idName;
-        el.className = setClasses(el, classname);
+        el.className = classname;
       } else if(onlyIdName){
         el.id = idName;
       } else if(onlyClassName) {
-        el.className = setClasses(el, classname);
+        el.className = classname;
       }
 
       // set element properties
@@ -88,22 +84,32 @@ var app = function () {
       const videoSplit = arrayObj.length / numOfRow;
 
       for(let x = 0; x < numOfRow; x++){
-        let rowDiv = createElement('div', '', `row-{x}`, 'row');
+        // let rowDiv = createElement('div', '', `row-${x}`, 'row');
+        let rowDiv = document.createElement('div');
+        rowDiv.id = `row-${x}`;
+        rowDiv.className = 'row';
         containerDiv.appendChild(rowDiv);
+
+        for(let y = 0; y < arrayObj.length; y++){
+          let videoFeed = arrayObj[y];
+          const playerContainerDiv = document.createElement('div');
+          playerContainerDiv.className = 'player-container';
+          
+          const playerTargetDiv = document.createElement('div');
+          playerTargetDiv.id = `player-${y}-row-${x}`
+          
+          playerContainerDiv.appendChild(playerTargetDiv);
+          rowDiv.appendChild(playerContainerDiv);
+
+          playerSetup(videoFeed, playerTargetDiv.id);
+        }
       }
 
-      for(let x = 0; x < arrayObj.length; x++){
-        let feed = arrayObj[x];
-        let div = createElement('div', {innerText: `player ${[x]}`}, `player-${x}`, '');
-        let row = div.id;
-        containerDiv.appendChild(div);
-        playerSetup(feed, row);
-      }
     };
 
     const reqCallback = function(error, response){
       const playlist = JSON.parse(response.text).playlist;
-      eachVideo(playlist);
+      eachVideo(playlist, 3);
     };
 
     // call

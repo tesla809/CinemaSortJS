@@ -5,9 +5,21 @@ var app = function () {
     const cinemaSort = require('./cinemaSort');
     const config = require('./config');
     const request = require('superagent');
+    // const $ = require('jQuery');
 
     const feedJsonLink = 'https://content.jwplatform.com/feeds/f49AJ8N4.json';
     const jwKey = config.jwLicense;
+
+    function checkDataType(data, dataType){
+        return typeof data === dataType;
+    };
+
+    function setClasses(element, classArray){
+      for(let x = 0; x < classArray.length; x++){
+        element.className += classArray[x] + ' ';
+      }
+      return element.className;
+    }
 
     const createElement = function(element, propertyObj, idName = '', classname = ''){
       const el = document.createElement(element);
@@ -18,17 +30,21 @@ var app = function () {
             onlyClassName = noIdName && !noClassName,
             both = !noIdName && !noClassName;
 
+      if(typeof classname === 'string'){
+        classname = classname.split();
+      }
+
       if (both){
         el.id = idName;
-        el.className = classname;
+        el.className = setClasses(el, classname);
       } else if(onlyIdName){
         el.id = idName;
       } else if(onlyClassName) {
-        el.className = classname;
+        el.className = setClasses(el, classname);
       }
 
       // set element properties
-      if (typeof propertyObj === 'object'){
+      if (checkDataType(propertyObj, 'object')){
         for(let key in propertyObj){
           el[key] = propertyObj[key];
         }
@@ -67,11 +83,18 @@ var app = function () {
       });
     };
 
-    const eachVideo = function(arrayObj){
+    const eachVideo = function(arrayObj, numOfRow){
       const containerDiv = document.querySelector('div#row-showcase');
+      const videoSplit = arrayObj.length / numOfRow;
+
+      for(let x = 0; x < numOfRow; x++){
+        let rowDiv = createElement('div', '', `row-{x}`, 'row');
+        containerDiv.appendChild(rowDiv);
+      }
+
       for(let x = 0; x < arrayObj.length; x++){
         let feed = arrayObj[x];
-        let div = createElement('div', {innerText: `player ${[x]}`}, `player-${x}`, 'row');
+        let div = createElement('div', {innerText: `player ${[x]}`}, `player-${x}`, '');
         let row = div.id;
         containerDiv.appendChild(div);
         playerSetup(feed, row);
@@ -80,10 +103,10 @@ var app = function () {
 
     const reqCallback = function(error, response){
       const playlist = JSON.parse(response.text).playlist;
-      // playerSetup(playlist[0]);
       eachVideo(playlist);
     };
 
+    // call
     request.get(feedJsonLink).end(reqCallback);
   });
 }();
